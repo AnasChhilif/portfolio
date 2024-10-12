@@ -3,7 +3,7 @@ const Tech = () => {
     return (
         <div id="tech" className="border-2 rounded p-3">
             <h1 className="text-2xl font-bold">Tech</h1>
-            <div className="w-2/3 mx-auto flex flex-wrap text-center justify-center gap-5 mt-2 text-5xl whitespace-normal">
+            <div className="w-5/6 mx-auto flex flex-wrap text-center justify-center gap-5 mt-2 text-5xl whitespace-normal">
                 <i className="devicon-go-plain"></i>
                 <i className="devicon-rust-original"></i>
                 <i className="devicon-kotlin-plain"></i>
