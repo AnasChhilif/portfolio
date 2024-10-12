@@ -7,7 +7,7 @@ type ProjectProps = {
 
 const Project: React.FC<ProjectProps> = ({ title, description }) => {
     return (
-        <div className="border-2 rounded-lg w-2/5 min-w-0">
+        <div className="border-2 rounded-lg w-[49%] min-w-0">
             <div className="border-b-2 rounded-none bg-gray-200 p-2 text-center flex flex-wrap">
                 <h1 className="text-xl font-bold min-w-0 ">{title}</h1>
             </div>
