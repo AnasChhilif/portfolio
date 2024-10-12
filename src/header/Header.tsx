@@ -9,11 +9,10 @@ const Navbar = () => {
     };
 
     const navItems = [
-        { id: 1, text: 'Home' },
-        { id: 2, text: 'About' },
-        { id: 3, text: 'Tech' },
-        { id: 4, text: 'Work' },
-        { id: 5, text: 'Contact' },
+        { id: 1, text: 'About', path: '#about' },
+        { id: 2, text: 'Tech', path: '#tech' },
+        { id: 3, text: 'Work', path: '#work' },
+        { id: 4, text: 'Contact', path: '#contact' },
     ];
 
     return (
@@ -25,7 +24,7 @@ const Navbar = () => {
                         key={item.id}
                         className='cursor-pointer text-xl'
                     >
-                        {item.text}
+                        <a href={item.path}>{item.text}</a>
                     </li>
                 ))}
             </ul>
@@ -39,9 +38,10 @@ const Navbar = () => {
             <ul
                 className={
                     nav
-                        ? 'fixed md:hidden left-0 top-0 w-[60%] h-full border-r border-r-gray-900 ease-in-out duration-500 mt-10'
+                        ? 'fixed md:hidden left-0 top-0 w-[60%] h-full border-r border-r-gray-900 ease-in-out duration-500 mt-12'
                         : 'ease-in-out w-[60%] duration-500 fixed top-0 bottom-0 left-[-100%]'
                 }
+
             >
 
                 {/* Mobile Navigation Items */}
@@ -50,14 +50,13 @@ const Navbar = () => {
                         key={item.id}
                         className='p-4 border-b rounded-xl duration-300 cursor-pointer border-gray-600'
                     >
-                        {item.text}
+                        <a href={item.path}>{item.text}</a>
                     </li>
                 ))}
             </ul>
 
-            <h1 className='w-1/3 text-3xl font-bold text-center'>Anas</h1>
+            <h1 className='w-1/3 flex flex-row justify-end'><img src="/src/assets/icon.png" alt="Anas" className='w-20' /></h1>
 
-            <button className='w-1/3 text-end'>light</button>
         </div>
     );
 };

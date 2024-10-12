@@ -3,6 +3,5 @@
 @tailwind utilities;
 
 * {
-    border: none;
     padding: none;
 }
