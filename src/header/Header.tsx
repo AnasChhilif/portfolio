@@ -1,24 +1,38 @@
-import { useState } from 'react';
-import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
+import { useEffect } from 'react';
 
 const Navbar = () => {
-    const [nav, setNav] = useState(false);
-
-    const handleNav = () => {
-        setNav(!nav);
-    };
-
     const navItems = [
         { id: 1, text: 'About', path: '#about' },
         { id: 2, text: 'Tech', path: '#tech' },
         { id: 3, text: 'Work', path: '#work' },
-        { id: 4, text: 'Contact', path: '#contact' },
     ];
 
-    return (
-        <div className='flex justify-between items-center w-full p-5' >
+    useEffect(() => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const handleClick = (event: any) => {
+            event.preventDefault();
+            const target = event.target.getAttribute('href');
+            const element = document.querySelector(target);
+            element.scrollIntoView({ behavior: 'smooth' });
+        };
 
-            <ul className='hidden md:w-1/3 md:flex md:justify-between '>
+        const links = document.querySelectorAll('a[href^="#"]');
+        links.forEach((link) => {
+            link.addEventListener('click', handleClick);
+        });
+
+        return () => {
+            links.forEach((link) => {
+                link.removeEventListener('click', handleClick);
+            });
+        };
+    }, []);
+
+    return (
+        <div className='flex justify-between items-center w-full p-5' style={{ scrollBehavior: 'smooth' }}>
+            <h1 className='w-1/3 '><img src="/icon.png" alt="Anas" className='w-20' /></h1>
+
+            <ul className='w-1/2 md:w-1/5 flex justify-between '>
                 {navItems.map(item => (
                     <li
                         key={item.id}
@@ -28,35 +42,6 @@ const Navbar = () => {
                     </li>
                 ))}
             </ul>
-
-            {/* Mobile Navigation Icon */}
-            <div onClick={handleNav} className='block md:hidden'>
-                {nav ? <AiOutlineClose size={20} /> : <AiOutlineMenu size={20} />}
-            </div>
-
-            {/* Mobile Navigation Menu */}
-            <ul
-                className={
-                    nav
-                        ? 'fixed md:hidden left-0 top-0 w-[60%] h-full border-r border-r-gray-900 ease-in-out duration-500 mt-12'
-                        : 'ease-in-out w-[60%] duration-500 fixed top-0 bottom-0 left-[-100%]'
-                }
-
-            >
-
-                {/* Mobile Navigation Items */}
-                {navItems.map(item => (
-                    <li
-                        key={item.id}
-                        className='p-4 border-b rounded-xl duration-300 cursor-pointer border-gray-600'
-                    >
-                        <a href={item.path}>{item.text}</a>
-                    </li>
-                ))}
-            </ul>
-
-            <h1 className='w-1/3 flex flex-row justify-end'><img src="/src/assets/icon.png" alt="Anas" className='w-20' /></h1>
-
         </div>
     );
 };
