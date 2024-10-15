@@ -29,19 +29,22 @@ const Navbar = () => {
     }, []);
 
     return (
-        <div className='flex justify-between items-center w-full p-5' style={{ scrollBehavior: 'smooth' }}>
-            <h1 className='w-1/3 '><img src="/icon.png" alt="Anas" className='w-20' /></h1>
+        <div className='w-1/3 mx-auto'>
 
-            <ul className='w-1/2 md:w-1/5 flex justify-between '>
-                {navItems.map(item => (
-                    <li
-                        key={item.id}
-                        className='cursor-pointer text-xl'
-                    >
-                        <a href={item.path}>{item.text}</a>
-                    </li>
-                ))}
-            </ul>
+            <div className='flex  items-center w-full p-5' style={{ scrollBehavior: 'smooth' }}>
+                <h1 className='w-1/3 '><img src="/icon.png" alt="Anas" className='w-20' /></h1>
+
+                <ul className='w-2/3 flex justify-between '>
+                    {navItems.map(item => (
+                        <li
+                            key={item.id}
+                            className='cursor-pointer text-xl'
+                        >
+                            <a href={item.path}>{item.text}</a>
+                        </li>
+                    ))}
+                </ul>
+            </div>
         </div>
     );
 };
