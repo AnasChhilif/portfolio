@@ -11,6 +11,7 @@ interface Message {
 function App() {
   const [activeConversation, setActiveConversation] = useState<string>('introduction')
   const [messages, setMessages] = useState<Message[]>([])
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   useEffect(() => {
     const conversation = conversationData[activeConversation]
@@ -21,10 +22,8 @@ function App() {
 
   const handleSendMessage = (text: string) => {
     if (!text.trim()) return
-
     const newMessages: Message[] = [...messages, { role: 'user', content: text }]
     setMessages(newMessages)
-
     setTimeout(() => {
       setMessages((prev) => [
         ...prev,
@@ -36,16 +35,32 @@ function App() {
     }, 800)
   }
 
+  const handleSelectConversation = (id: string) => {
+    setActiveConversation(id)
+    setIsSidebarOpen(false) // Close sidebar on mobile after selection
+  }
+
   return (
     <div className="flex h-screen bg-[#0a0a0a] overflow-hidden">
       <Sidebar 
         activeConversation={activeConversation} 
-        onSelectConversation={setActiveConversation} 
+        onSelectConversation={handleSelectConversation}
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
       />
       <ChatArea 
         messages={messages} 
-        onSendMessage={handleSendMessage} 
+        onSendMessage={handleSendMessage}
+        onMenuClick={() => setIsSidebarOpen(true)}
       />
+      
+      {/* Overlay for mobile */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-20 lg:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
     </div>
   )
 }

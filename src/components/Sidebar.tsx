@@ -1,8 +1,10 @@
-import { Globe, Github, Linkedin } from 'lucide-react'
+import { Globe, Github, Linkedin, X } from 'lucide-react'
 
 interface SidebarProps {
   activeConversation: string
   onSelectConversation: (id: string) => void
+  isOpen: boolean
+  onClose: () => void
 }
 
 const predefinedQuestions = [
@@ -34,14 +36,28 @@ const socialLinks = [
   },
 ]
 
-export default function Sidebar({ activeConversation, onSelectConversation }: SidebarProps) {
+export default function Sidebar({ activeConversation, onSelectConversation, isOpen, onClose }: SidebarProps) {
   return (
-    <aside className="w-[290px] bg-[#141414] flex flex-col border-r border-[#2a2a2a] h-screen overflow-hidden flex-shrink-0">
+    <aside 
+      className={`
+        w-[290px] bg-[#141414] flex flex-col border-r border-[#2a2a2a] h-screen overflow-hidden flex-shrink-0
+        fixed lg:relative z-30
+        transition-transform duration-300 ease-in-out
+        ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+      `}
+    >
       {/* Header */}
-      <div className="px-6 py-5 border-b border-[#2a2a2a]">
+      <div className="px-6 py-5 border-b border-[#2a2a2a] flex items-center justify-between">
         <h1 className="text-base font-semibold text-white tracking-tight">
           Chat History
         </h1>
+        {/* Close button for mobile */}
+        <button
+          onClick={onClose}
+          className="lg:hidden text-[#a0a0a0] hover:text-white transition-colors"
+        >
+          <X className="w-5 h-5" />
+        </button>
       </div>
 
       {/* Predefined Questions - Scrollable */}
