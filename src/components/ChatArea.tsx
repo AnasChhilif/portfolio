@@ -1,21 +1,22 @@
 import { useState, useRef, useEffect } from 'react'
-import { Send, User, Menu } from 'lucide-react'
+import { Send, User, Menu, Loader2 } from 'lucide-react'
 import Message from './Message'
 
 interface ChatAreaProps {
   messages: Array<{ role: 'user' | 'assistant'; content: string }>
   onSendMessage: (text: string) => void
   onMenuClick: () => void
+  isLoading?: boolean
 }
 
-export default function ChatArea({ messages, onSendMessage, onMenuClick }: ChatAreaProps) {
+export default function ChatArea({ messages, onSendMessage, onMenuClick, isLoading = false }: ChatAreaProps) {
   const [input, setInput] = useState('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
+  }, [messages, isLoading])
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -26,7 +27,7 @@ export default function ChatArea({ messages, onSendMessage, onMenuClick }: ChatA
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (input.trim()) {
+    if (input.trim() && !isLoading) {
       onSendMessage(input)
       setInput('')
     }
@@ -85,6 +86,23 @@ export default function ChatArea({ messages, onSendMessage, onMenuClick }: ChatA
             {messages.map((message, index) => (
               <Message key={index} role={message.role} content={message.content} />
             ))}
+            
+            {/* Loading indicator */}
+            {isLoading && (
+              <div className="flex gap-2 sm:gap-3 animate-[fadeIn_0.3s_ease-out]">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#1a1a1a] text-[#6366f1] border border-[#2a2a2a] flex items-center justify-center flex-shrink-0">
+                  <Loader2 className="w-4 h-4 sm:w-[18px] sm:h-[18px] animate-spin" />
+                </div>
+                <div className="flex items-center">
+                  <div className="flex gap-1">
+                    <span className="w-2 h-2 bg-[#6366f1] rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                    <span className="w-2 h-2 bg-[#6366f1] rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                    <span className="w-2 h-2 bg-[#6366f1] rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                  </div>
+                </div>
+              </div>
+            )}
+            
             <div ref={messagesEndRef} />
           </div>
         )}
@@ -99,16 +117,21 @@ export default function ChatArea({ messages, onSendMessage, onMenuClick }: ChatA
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Ask me anything about my work..."
+              placeholder={isLoading ? "Waiting for response..." : "Ask me anything about my work..."}
               rows={1}
-              className="flex-1 bg-transparent border-none text-white text-sm sm:text-[15px] leading-relaxed resize-none outline-none placeholder:text-[#666666] max-h-[120px]"
+              disabled={isLoading}
+              className="flex-1 bg-transparent border-none text-white text-sm sm:text-[15px] leading-relaxed resize-none outline-none placeholder:text-[#666666] max-h-[120px] disabled:opacity-50"
             />
             <button
               type="submit"
-              disabled={!input.trim()}
+              disabled={!input.trim() || isLoading}
               className="bg-[#6366f1] text-white w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center flex-shrink-0 transition-all duration-200 hover:bg-[#7c3aed] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#6366f1] hover:shadow-lg hover:-translate-y-0.5"
             >
-              <Send className="w-4 h-4 sm:w-[18px] sm:h-[18px]" />
+              {isLoading ? (
+                <Loader2 className="w-4 h-4 sm:w-[18px] sm:h-[18px] animate-spin" />
+              ) : (
+                <Send className="w-4 h-4 sm:w-[18px] sm:h-[18px]" />
+              )}
             </button>
           </div>
           <p className="text-[11px] sm:text-xs text-[#666666] mt-2 text-center">
