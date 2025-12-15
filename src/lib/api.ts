@@ -1,7 +1,3 @@
-// src/lib/api.ts
-
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
-
 export interface Message {
   role: 'user' | 'assistant' | 'system'
   content: string
@@ -33,16 +29,16 @@ export async function sendChatMessage(
   systemPrompt?: string
 ): Promise<ChatResponse> {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/chat`, {
+    const response = await fetch('/api/chat', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        messages,
-        system_prompt: systemPrompt,
-      } as ChatRequest),
-    })
+        messages: messages,
+        system_prompt: systemPrompt
+      })
+    });
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}))
@@ -62,7 +58,7 @@ export async function sendChatMessage(
     
     if (error instanceof TypeError && error.message.includes('fetch')) {
       throw new APIError(
-        'Cannot connect to backend server. Make sure it\'s running on ' + API_BASE_URL,
+        'Cannot connect to backend server.',
         0,
         error.message
       )
@@ -73,14 +69,5 @@ export async function sendChatMessage(
       undefined,
       error instanceof Error ? error.message : String(error)
     )
-  }
-}
-
-export async function checkHealth(): Promise<boolean> {
-  try {
-    const response = await fetch(`${API_BASE_URL}/health`)
-    return response.ok
-  } catch {
-    return false
   }
 }
